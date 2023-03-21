@@ -1,5 +1,5 @@
 1. Install the "Tampermonkey" extension.
-2. Click the Tampermonkey extension icon > Click create a new script.
+2. Click the Tampermonkey extension icon then click "create a new script...".
 3, Copy and paste the code frorm the "CODE" file.
-4. On the top left of the editor, click file, then save. 
+4. On the top left of the editor, click the "File" button, then click "Save". 
 5. Make sure the userscript is toggled on and enabled! 
