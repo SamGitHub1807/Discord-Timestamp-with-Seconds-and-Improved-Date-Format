@@ -1,17 +1,9 @@
 <div align="center">
 
 # Discord-Timestamp-with-Seconds-and-Improved-Date-Format
-Add seconds to Discord message timestamps, and improve the date format. 
+Adds seconds to Discord message timestamps, and improves the date format. 
 
-So for example, instead of showing:
-
-[Discord Username] 03/19/2023 4:31 PM
-
-It will show:
-
-[Discord Username] Mar 19, 2023 4:31:31 PM
-
-## 📷 Screenshots to help you understand better!
+## 📷 Screenshots
 | **Before** | **After** |
 |     :---:      |     :---:      |
 | <img width="1157" alt="Before 1" src="https://user-images.githubusercontent.com/122677421/226656774-b0a0c875-2842-460f-a872-e11bbcfe94ac.png"> | <img width="922" alt="After 1" src="https://user-images.githubusercontent.com/122677421/226656968-5930d158-398e-4742-bb37-cf729e572cd2.png">
