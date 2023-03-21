@@ -1,0 +1,35 @@
+// ==UserScript==
+// @name         Discord Timestamp with Seconds and Date
+// @namespace    http://tampermonkey.net/
+// @version      1.0
+// @description  Adds seconds and date to Discord timestamps and displays "Today" for current-day messages
+// @author       Sam (and ChatGPT lol; yes, ChatGPT helped me with this. took me 3 queries!)
+// @match        https://discord.com/*
+// @grant        none
+// ==/UserScript==
+
+(function() {
+    'use strict';
+
+    let observer = new MutationObserver(function(mutations) {
+        mutations.forEach(function(mutation) {
+            if (mutation.type == "childList") {
+                let messages = mutation.target.querySelectorAll(".timestamp-p1Df1m time");
+                messages.forEach(function(message) {
+                    let timestamp = message.getAttribute("datetime");
+                    let date = new Date(timestamp);
+                    let now = new Date();
+                    let formattedTime = date.toLocaleTimeString([], { hour: 'numeric', minute: 'numeric', second: 'numeric' }).replace(" PM", " PM").replace(" AM", " AM");
+                    let formattedDate = date.toLocaleDateString([], { year: 'numeric', month: 'short', day: 'numeric' });
+                    let todayFormattedTime = formattedTime;
+                    if (now.toDateString() === date.toDateString()) {
+                        todayFormattedTime = "Today at " + formattedTime;
+                    }
+                    message.innerHTML = "<i class=\"separator-AebOhG\" aria-hidden=\"true\"> — </i>" + (now - date > 86400000 ? formattedDate + " " + formattedTime : todayFormattedTime);
+                });
+            }
+        });
+    });
+
+    observer.observe(document, { childList: true, subtree: true });
+})();
