@@ -1,9 +1,9 @@
 // ==UserScript==
 // @name         Discord Timestamp with Seconds and Date
 // @namespace    http://tampermonkey.net/
-// @version      1.0
-// @description  Adds seconds and date to Discord timestamps and displays "Today" for current-day messages
-// @author       Sam (and ChatGPT lol; yes, ChatGPT helped me with this. took me 3 queries!)
+// @version      2.0
+// @description  Adds seconds, date, and time elapsed to Discord timestamps and displays "Today" for current-day messages
+// @author       Sam (and ChatGPT lol; yes, ChatGPT helped me with this.
 // @match        https://discord.com/*
 // @grant        none
 // ==/UserScript==
@@ -22,11 +22,12 @@
                     let formattedTime = date.toLocaleTimeString([], { hour: 'numeric', minute: 'numeric', second: 'numeric' }).replace(" PM", " PM").replace(" AM", " AM");
                     let formattedDate = date.toLocaleDateString([], { year: 'numeric', month: 'short', day: 'numeric' });
                     let todayFormattedTime = "Today at " + formattedTime;
+                    let timeElapsed = getTimeElapsed(date, now);
 
                     if (now.toDateString() === date.toDateString()) {
-                        message.innerHTML = "<i class=\"separator-AebOhG\" aria-hidden=\"true\"> — </i>" + todayFormattedTime;
+                        message.innerHTML = "<i class=\"separator-AebOhG\" aria-hidden=\"true\"> — </i>" + todayFormattedTime + " (" + timeElapsed + ")";
                     } else {
-                        message.innerHTML = "<i class=\"separator-AebOhG\" aria-hidden=\"true\"> — </i>" + formattedDate + " " + formattedTime;
+                        message.innerHTML = "<i class=\"separator-AebOhG\" aria-hidden=\"true\"> — </i>" + formattedDate + " " + formattedTime + " (" + timeElapsed + ")";
                     }
                 });
             }
@@ -34,4 +35,25 @@
     });
 
     observer.observe(document, { childList: true, subtree: true });
+
+    function getTimeElapsed(date1, date2) {
+        let diff = Math.abs(date2.getTime() - date1.getTime()) / 1000;
+        let minutes = Math.floor(diff / 60);
+        let hours = Math.floor(minutes / 60);
+        let days = Math.floor(hours / 24);
+        let months = Math.floor(days / 30);
+        let years = Math.floor(months / 12);
+
+        if (years > 0) {
+            return years + " year" + (years > 1 ? "s" : "") + " ago";
+        } else if (months > 0) {
+            return months + " month" + (months > 1 ? "s" : "") + " ago";
+        } else if (days > 0) {
+            return days + " day" + (days > 1 ? "s" : "") + " ago";
+        } else if (hours > 0) {
+            return hours + " hour" + (hours > 1 ? "s" : "") + " ago";
+        } else {
+            return minutes + " minute" + (minutes > 1 ? "s" : "") + " ago";
+        }
+    }
 })();
