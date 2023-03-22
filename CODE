@@ -8,16 +8,6 @@
 // @grant        none
 // ==/UserScript==
 
-// ==UserScript==
-// @name         Discord Timestamp with Seconds and Date
-// @namespace    http://tampermonkey.net/
-// @version      1.0
-// @description  Adds seconds and date to Discord timestamps and displays "Today" for current-day messages
-// @author       Sam (and ChatGPT lol; yes, ChatGPT helped me with this. took me 3 queries!)
-// @match        https://discord.com/*
-// @grant        none
-// ==/UserScript==
-
 (function() {
     'use strict';
 
