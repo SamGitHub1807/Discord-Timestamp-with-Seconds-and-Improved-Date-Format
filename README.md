@@ -17,3 +17,12 @@ Know when a message was edited
 | **Before** | **After** |
 |     :---:      |     :---:      |
 | <img width="371" alt="Before 3" src="https://user-images.githubusercontent.com/122677421/226767214-098e008b-2f48-41e8-88ed-4f180bcba749.png"> | <img width="648" alt="After 3" src="https://user-images.githubusercontent.com/122677421/226767270-53bc115e-10ac-456c-aba9-e185b8232d23.png">
+
+New feature:
+
+Know how long ago a message was sent
+
+## 🖼️ Screenshots
+| **Before** | **After** |
+|     :---:      |     :---:      |
+| <img width="522" alt="Before 4" src="https://user-images.githubusercontent.com/122677421/226815281-daab02fc-8352-4013-ab68-3295223d8008.png"> | <img width="559" alt="After 4" src="https://user-images.githubusercontent.com/122677421/226815389-57f5fae3-6412-4dc0-aee6-b58c8a18c7e8.png">
