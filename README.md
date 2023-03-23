@@ -1,8 +1,7 @@
 <div align="center">
 
 # Discord Timestamp with Seconds
-Adds seconds to Discord message timestamps
-Improves the date format
+Adds seconds to Discord message timestamps and improves the date format
 
 ## 🖼️ Screenshots
 | **Before** | **After** |
