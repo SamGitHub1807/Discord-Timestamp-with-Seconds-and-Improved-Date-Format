@@ -11,7 +11,8 @@ Adds seconds to Discord message timestamps and improves the date format
 
 New feature:
 
-Know how long ago a message was sent
+Know how long ago a message was sent (by creating a new element beside the timestamp and calculating the time elapsed since the message was sent)
+
 
 ## 🖼️ Screenshots
 | **Before** | **After** |
