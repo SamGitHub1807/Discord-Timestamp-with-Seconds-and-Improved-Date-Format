@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Discord Timestamp with Seconds and Date
 // @namespace    http://tampermonkey.net/
-// @version      2.6
+// @version      2.8
 // @description  Gives users the ability to see seconds to Discord message timestamps and improves the date format. It also allows users to see the time elapsed since a message was sent.
 // @author       Sam (and ChatGPT lol; yes, ChatGPT helped me with this. With the help of many others listed on the "History" section of the GreasyFork page of this script. (https://greasyfork.org/en/scripts/462588-discord-timestamp-with-seconds-and-date)
 // @match        https://discord.com/*
@@ -9,71 +9,65 @@
 // @license      MIT
 // ==/UserScript==
  
-(function() {
+(function () {
     'use strict';
  
-    let observer = new MutationObserver(function(mutations) {
-        mutations.forEach(function(mutation) {
-            if (mutation.type == "childList") {
-                let messages = mutation.target.querySelectorAll("h3 .timestamp-p1Df1m time");
-                messages.forEach(function(message) {
-                    let timestamp = message.getAttribute("datetime");
-                    let date = new Date(timestamp);
-                    let now = new Date();
-                    let formattedTime = date.toLocaleTimeString([], { hour: 'numeric', minute: 'numeric', second: 'numeric' }).replace(" PM", " PM").replace(" AM", " AM");
-                    let formattedDate = date.toLocaleDateString([], { year: 'numeric', month: 'short', day: 'numeric' });
-                    let todayFormattedTime = "Today at " + formattedTime;
-                    let timeElapsed = getTimeElapsed(date, now);
+    // Define a function to handle mutations
+    function handleMutations(mutationsList, observer) {
+        for (let mutation of mutationsList) {
+            if (mutation.type === 'childList') {
+                const messages = mutation.target.querySelectorAll('.timestamp-p1Df1m time');
+                messages.forEach((message) => {
+                    const timestamp = message.getAttribute('datetime');
  
+                    const date = new Date(timestamp);
+                    const now = new Date();
+                    const timeElapsed = getTimeElapsed(date, now);
+                    const formattedTime = date.toLocaleTimeString([], { hour: 'numeric', minute: 'numeric', second: 'numeric' });
+                    const formattedDate = date.toLocaleDateString([], { year: 'numeric', month: 'short', day: 'numeric' });
+                    const todayFormattedTime = `Today at ${formattedTime}`;
+ 
+                    let messageContent;
+                    const dateElement = '<i class="separator-AebOhG" aria-hidden="true"> — </i>'
                     if (now.toDateString() === date.toDateString()) {
-                        message.innerHTML = "<i class=\"separator-AebOhG\" aria-hidden=\"true\"> — </i>" + todayFormattedTime + " (" + timeElapsed + ")";
+                        messageContent = message.parentElement.classList.contains('timestampVisibleOnHover-9PEuZS')
+                            ? `${dateElement} ${formattedTime} (${timeElapsed})`
+                            : `${dateElement} ${todayFormattedTime} (${timeElapsed})`;
                     } else {
-                        message.innerHTML = "<i class=\"separator-AebOhG\" aria-hidden=\"true\"> — </i>" + formattedDate + " " + formattedTime + " (" + timeElapsed + ")";
+                        messageContent = message.parentElement.classList.contains('timestampVisibleOnHover-9PEuZS')
+                            ? `${dateElement} ${formattedTime} (${timeElapsed})`
+                            : `${dateElement} ${formattedDate} ${formattedTime} (${timeElapsed})`;
                     }
-                });
-            }
-        });
-    });
  
+                    message.innerHTML = messageContent;
+                })
+            }
+        }
+    }
+ 
+    // Create a new MutationObserver and observe the document
+    const observer = new MutationObserver(handleMutations);
     observer.observe(document, { childList: true, subtree: true });
  
+    // Define a function to calculate the time elapsed between two dates
     function getTimeElapsed(date1, date2) {
-        let diff = Math.abs(date2.getTime() - date1.getTime()) / 1000;
-        let minutes = Math.floor(diff / 60);
-        let hours = Math.floor(minutes / 60);
-        let days = Math.floor(hours / 24);
-        let months = Math.floor(days / 30);
-        let years = Math.floor(months / 12);
+        const diff = Math.abs(date2.getTime() - date1.getTime()) / 1000;
+        const minutes = Math.floor(diff / 60);
+        const hours = Math.floor(minutes / 60);
+        const days = Math.floor(hours / 24);
+        const months = Math.floor(days / 30);
+        const years = Math.floor(months / 12);
  
         if (years > 0) {
-            return years + " year" + (years > 1 ? "s" : "") + " ago";
+            return `${years} year${years > 1 ? 's' : ''} ago`;
         } else if (months > 0) {
-            return months + " month" + (months > 1 ? "s" : "") + " ago";
+            return `${months} month${months > 1 ? 's' : ''} ago`;
         } else if (days > 0) {
-            return days + " day" + (days > 1 ? "s" : "") + " ago";
+            return `${days} day${days > 1 ? 's' : ''} ago`;
         } else if (hours > 0) {
-            return hours + " hour" + (hours > 1 ? "s" : "") + " ago";
+            return `${hours} hour${hours > 1 ? 's' : ''} ago`;
         } else {
-            return minutes + " minute" + (minutes > 1 ? "s" : "") + " ago";
+            return `${minutes} minute${minutes > 1 ? 's' : ''} ago`;
         }
     }
 })();
- 
-// MIT License
-// Permission is hereby granted, free of charge, to any person obtaining a copy
-// of this software and associated documentation files (the "Software"), to deal
-// in the Software without restriction, including without limitation the rights
-// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-// copies of the Software, and to permit persons to whom the Software is
-// furnished to do so, subject to the following conditions:
-//
-// The above copyright notice and this permission notice shall be included in all
-// copies or substantial portions of the Software.
-//
-// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-// SOFTWARE.
