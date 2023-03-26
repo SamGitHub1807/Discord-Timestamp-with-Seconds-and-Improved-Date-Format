@@ -1,20 +1,21 @@
 // ==UserScript==
 // @name         Discord Timestamp with Seconds and Date
 // @namespace    http://tampermonkey.net/
-// @version      2.0
-// @description  Adds seconds, date, and time elapsed to Discord timestamps and displays "Today" for current-day messages
+// @version      2.6
+// @description  Gives users the ability to see seconds to Discord message timestamps and improves the date format. It also allows users to see the time elapsed since a message was sent.
 // @author       Sam (and ChatGPT lol; yes, ChatGPT helped me with this.
 // @match        https://discord.com/*
 // @grant        none
+// @license      MIT
 // ==/UserScript==
-
+ 
 (function() {
     'use strict';
-
+ 
     let observer = new MutationObserver(function(mutations) {
         mutations.forEach(function(mutation) {
             if (mutation.type == "childList") {
-                let messages = mutation.target.querySelectorAll(".timestamp-p1Df1m time");
+                let messages = mutation.target.querySelectorAll("h3 .timestamp-p1Df1m time");
                 messages.forEach(function(message) {
                     let timestamp = message.getAttribute("datetime");
                     let date = new Date(timestamp);
@@ -23,7 +24,7 @@
                     let formattedDate = date.toLocaleDateString([], { year: 'numeric', month: 'short', day: 'numeric' });
                     let todayFormattedTime = "Today at " + formattedTime;
                     let timeElapsed = getTimeElapsed(date, now);
-
+ 
                     if (now.toDateString() === date.toDateString()) {
                         message.innerHTML = "<i class=\"separator-AebOhG\" aria-hidden=\"true\"> — </i>" + todayFormattedTime + " (" + timeElapsed + ")";
                     } else {
@@ -33,9 +34,9 @@
             }
         });
     });
-
+ 
     observer.observe(document, { childList: true, subtree: true });
-
+ 
     function getTimeElapsed(date1, date2) {
         let diff = Math.abs(date2.getTime() - date1.getTime()) / 1000;
         let minutes = Math.floor(diff / 60);
@@ -43,7 +44,7 @@
         let days = Math.floor(hours / 24);
         let months = Math.floor(days / 30);
         let years = Math.floor(months / 12);
-
+ 
         if (years > 0) {
             return years + " year" + (years > 1 ? "s" : "") + " ago";
         } else if (months > 0) {
@@ -57,3 +58,22 @@
         }
     }
 })();
+ 
+// MIT License
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in all
+// copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+// SOFTWARE.
