@@ -3,7 +3,7 @@
 // @namespace    http://tampermonkey.net/
 // @version      2.6
 // @description  Gives users the ability to see seconds to Discord message timestamps and improves the date format. It also allows users to see the time elapsed since a message was sent.
-// @author       Sam (and ChatGPT lol; yes, ChatGPT helped me with this.
+// @author       Sam (and ChatGPT lol; yes, ChatGPT helped me with this. With the help of many others listed on the "History" section of the GreasyFork page of this script. (https://greasyfork.org/en/scripts/462588-discord-timestamp-with-seconds-and-date)
 // @match        https://discord.com/*
 // @grant        none
 // @license      MIT
